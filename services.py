@@ -1,15 +1,9 @@
-from data_loader import load_all_data, load_expenses, load_income
 from analysis import *
 
 class FinanceService:
-    def __init__(self, path):
-        self.path = path
-        self.reload_data()
-
-    def reload_data(self):
-        sheets =load_all_data(self.path)
-        self.expenses = load_expenses(sheets)
-        self.income = load_income(sheets)
+    def __init__(self, expenses, income):
+        self.expenses = expenses
+        self.income = income
 
     def get_stats(self):
         return {
