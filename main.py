@@ -10,6 +10,11 @@ from src.npanalysis import analytics_report
 
 from src.ui.main_window import MainWindow
 
+from src.generators import (
+    expense_generator,
+    large_expenses_generator
+)
+
 
 def show_stats():
 
@@ -55,13 +60,36 @@ def show_analytics():
 
     categories = service.get_category_stats()
 
-    print("\n=== MONTHLY EXPENSES ===")
+    print("\nMONTHLY EXPENSES")
 
     print(monthly)
 
-    print("\n=== CATEGORY STATS ===")
+    print("\nCATEGORY STATS")
 
     print(categories)
+
+    print("\nGENERATED EXPENSES")
+
+    generator = expense_generator(expenses)
+
+    for expense in generator:
+
+        print(expense)
+
+        break
+
+    print("\n=== LARGE EXPENSES ===")
+
+    large_generator = large_expenses_generator(
+        expenses
+    )
+
+    for expense in large_generator:
+
+        print(
+            expense["category"],
+            expense["amount"]
+        )
 
 
 def run_gui():
