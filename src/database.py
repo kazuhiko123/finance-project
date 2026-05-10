@@ -63,12 +63,20 @@ def save_income(df: pd.DataFrame):
 
 
 def load_expenses_db():
+
     conn = get_connection()
 
     df = pd.read_sql(
-        "SELECT * FROM expenses",
+        """
+        SELECT
+            rowid as id,
+            *
+        FROM expenses
+        """,
         conn
     )
+
+    df["date"] = pd.to_datetime(df["date"])
 
     conn.close()
 
