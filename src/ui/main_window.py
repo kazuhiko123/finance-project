@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 
-from src.ui.add_expense_window import AddExpenseWindow
-from src.ui.monthly_chart import MonthlyChart
+from ..repository import delete_expense
+from .add_expense_window import AddExpenseWindow
+from .monthly_chart import MonthlyChart
 
-from src.database import *
+from ..database import *
 
-from src.services import *
+from ..services import *
 
 
 class MainWindow:
@@ -19,7 +20,7 @@ class MainWindow:
 
         self.root.geometry("1000x700")
 
-        # ===== DATA =====
+        # DATA
 
         expenses = load_expenses_db()
 
@@ -30,7 +31,7 @@ class MainWindow:
             income
         )
 
-        # ===== HEADER =====
+        #HEADER
 
         title = tk.Label(
             self.root,
@@ -40,7 +41,7 @@ class MainWindow:
 
         title.pack(pady=20)
 
-        # ===== STATS =====
+        #STATS
 
         self.stats_frame = tk.Frame(self.root)
 
@@ -70,7 +71,7 @@ class MainWindow:
 
         self.expenses_label.pack()
 
-        # ===== BUTTON =====
+        #BUTTON
 
         add_expense_btn = ttk.Button(
             self.root,
@@ -80,7 +81,15 @@ class MainWindow:
 
         add_expense_btn.pack(pady=20)
 
-        # ===== TABLE =====
+        delete_btn = ttk.Button(
+            self.root,
+            text="Удалить расход",
+            command=self.delete_selected_expense
+        )
+
+        delete_btn.pack(pady=10)
+
+        # TABLE
 
         table_title = tk.Label(
             self.root,
@@ -91,6 +100,7 @@ class MainWindow:
         table_title.pack(pady=10)
 
         columns = (
+            "id",
             "date",
             "category",
             "amount",
@@ -112,7 +122,7 @@ class MainWindow:
 
         self.tree.pack(fill="both", expand=True, padx=20)
 
-        # ===== INIT =====
+        # INIT
 
         self.refresh_dashboard()
 
@@ -141,13 +151,13 @@ class MainWindow:
             text=f"Расходы: {stats['expenses']}"
         )
 
-        # ===== CLEAR TABLE =====
+        # CLEAR TABLE
 
         for item in self.tree.get_children():
 
             self.tree.delete(item)
 
-        # ===== INSERT DATA =====
+        # INSERT DATA
 
         last_expenses = self.service.get_last_expenses()
 
@@ -157,6 +167,7 @@ class MainWindow:
                 "",
                 "end",
                 values=(
+                    row["id"],
                     row["date"],
                     row["category"],
                     row["amount"],
@@ -171,6 +182,24 @@ class MainWindow:
             self.refresh_dashboard
         )
 
+
     def run(self):
 
         self.root.mainloop()
+
+    def delete_selected_expense(self):
+
+        selected_item = self.tree.selection()
+
+        if not selected_item:
+            return
+
+        item = self.tree.item(selected_item)
+
+        values = item["values"]
+
+        expense_id = values[0]
+
+        delete_expense(expense_id)
+
+        self.refresh_dashboard()

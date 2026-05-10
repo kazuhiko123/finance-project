@@ -1,4 +1,4 @@
-from src.database import get_connection
+from .database import get_connection
 
 def add_expense(date, category, amount, type_, comment):
 
@@ -22,6 +22,21 @@ def add_expense(date, category, amount, type_, comment):
         type_,
         comment
     ))
+
+    conn.commit()
+
+    conn.close()
+
+def delete_expense(expense_id):
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM expenses
+        WHERE id = ?
+    """, (expense_id,))
 
     conn.commit()
 

@@ -1,4 +1,4 @@
-from src.analysis import *
+from .analysis import *
 
 class FinanceService:
 
