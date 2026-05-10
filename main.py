@@ -1,5 +1,4 @@
-from ui.main_window import MainWindow
-
+from src.ui.main_window import MainWindow
 
 app = MainWindow()
 

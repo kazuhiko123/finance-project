@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 
-from repository import add_expense
+from src.repository import add_expense
 
 
 class AddExpenseWindow:
 
-    def __init__(self, parent):
+    def __init__(self, parent, refresh_callback):
+
+        self.refresh_callback = refresh_callback
 
         self.window = tk.Toplevel(parent)
 
@@ -75,7 +77,9 @@ class AddExpenseWindow:
 
         category = self.category_entry.get()
 
-        amount = float(self.amount_entry.get())
+        amount = float(
+            self.amount_entry.get()
+        )
 
         type_ = self.type_combo.get()
 
@@ -88,5 +92,7 @@ class AddExpenseWindow:
             type_,
             comment
         )
+
+        self.refresh_callback()
 
         self.window.destroy()

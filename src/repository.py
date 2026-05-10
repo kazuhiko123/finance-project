@@ -1,5 +1,4 @@
-from db import get_connection
-
+from src.database import get_connection
 
 def add_expense(date, category, amount, type_, comment):
 
