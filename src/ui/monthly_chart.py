@@ -1,49 +1,50 @@
+import tkinter as tk
+
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 
 
-class MonthlyChart:
+class MonthlyChart(tk.Frame):
 
     def __init__(self, parent, monthly_data):
 
-        self.figure = Figure(
-            figsize=(6, 4),
-            dpi=100
+        super().__init__(parent)
+
+        # ВАЖНО
+        self.pack(fill="both", expand=True)
+
+        # Подписи месяцев
+        labels = [
+            str(period)
+            for period in monthly_data.index
+        ]
+
+        # Создание графика
+        fig, ax = plt.subplots(figsize=(6, 4))
+
+        ax.plot(labels, monthly_data.values)
+
+        ax.set_title("Расходы по месяцам")
+
+        ax.set_xlabel("Месяц")
+
+        ax.set_ylabel("Сумма")
+
+        # Поворот подписей
+        plt.xticks(rotation=45)
+
+        # Красивые отступы
+        fig.tight_layout()
+
+        # Canvas
+        canvas = FigureCanvasTkAgg(
+            fig,
+            master=self
         )
 
-        self.ax = self.figure.add_subplot(111)
+        canvas.draw()
 
-        months = monthly_data.index.astype(str)
-
-        amounts = monthly_data.values
-
-        self.ax.plot(
-            months,
-            amounts,
-            marker="o"
-        )
-
-        self.ax.set_title(
-            "Расходы по месяцам"
-        )
-
-        self.ax.set_xlabel(
-            "Месяц"
-        )
-
-        self.ax.set_ylabel(
-            "Сумма"
-        )
-
-        self.ax.grid(True)
-
-        self.canvas = FigureCanvasTkAgg(
-            self.figure,
-            master=parent
-        )
-
-        self.canvas.draw()
-
-        self.canvas.get_tk_widget().pack(
-            pady=20
+        canvas.get_tk_widget().pack(
+            fill="both",
+            expand=True
         )

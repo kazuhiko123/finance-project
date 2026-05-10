@@ -41,3 +41,7 @@ class FinanceService:
         )
 
         return sorted_df.head(limit)
+
+    def get_category_stats(self):
+
+        return expenses_by_category(self.expenses)
