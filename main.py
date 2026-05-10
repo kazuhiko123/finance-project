@@ -15,7 +15,13 @@ from src.generators import (
     large_expenses_generator
 )
 
+from src.decorators import (
+    log_function_call,
+    measure_time
+)
 
+@log_function_call
+@measure_time
 def show_stats():
 
     expenses = load_expenses_db()
@@ -45,6 +51,8 @@ def show_stats():
     )
 
 
+@log_function_call
+@measure_time
 def show_analytics():
 
     expenses = load_expenses_db()
